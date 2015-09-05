@@ -1,0 +1,113 @@
+%% PSmac Parameter File %%
+   
+Cosmology 2
+
+%% Image Properties, comoving %%
+
+Center_X 3440
+Center_Y -768
+Center_Z -5657
+
+Use_Barycenter 0
+
+Projection 0        % Normal Projection
+XYSize 2000
+ZDepth 2000
+XYPix 256
+
+NSide 32            % HEALPIX Projection
+Rmin 1000
+Rmax 1000000
+
+
+%% I/O Options %% 
+
+Input_File  data/snap_092
+N_IOTasks 1
+
+NoClobber 0
+Output_File ana_synchro.fits
+
+
+%% Effect Selection & Options %%
+
+Effect_Module 12
+Effect_Flag 0
+
+E_min 1e9           % Energy Range [eV]: Xray, Gamma, Synchro
+E_max 1e0
+
+Freq 1.4e9          % Frequency [Hz]: Sz,Synchro
+
+a_cr 2.375          % CR spectral index
+X_cr 0.01           % CR Normalisation rel. thermal
+IntrRM 0            % Toggle Intrinsic RM
+PitchAngInt 0       % Toggle Pitch angle integration
+
+t_turb 1e7          % Reacceleration Timescale Cassano 05
+eta_t 0.26
+
+%Gadget
+UnitLength_in_cm 			3.085678e21        %  1.0 kpc
+UnitMass_in_g 				1.989e43           %  1.0e10 solar masses
+UnitVelocity_in_cm_per_s 	1e5                %  1 km/sec
+
+%Piernik
+%UnitLength_in_cm 			3.085678e18        %  1.0 pc
+%UnitMass_in_g 				1.989e33           %  1.0 solar masses
+%UnitVelocity_in_cm_per_s 	98047              %  1 pc/Myr
+
+%% Effect Methods %%
+%  0 - Physical Density [g/cm^2]
+%  1 - Velocities [cm/s] ( > 0 req. -DVTURB )
+%		 0 - Velocity
+%		 1 - RMS around central velocity
+%		 2 - RMS around mean velocity
+%		 3 - Mean Velocity
+%        4 - Velocity Divergence in hsml
+%        5 - Velocity Curl in hsml
+%        6 - Speed of Sound
+%  2 - X-Ray Surface Brightness
+%  3 - Fokker Planck Coefficients
+%        0 - Dpp/p^2 Reacceleration coefficient
+%        1 - Reacceleration timescale
+%        2 - Cooling timescale
+%  4 - Temperature
+%      0 - Mass Weighted
+%      1 - Emission Weighted
+%      2 - Sound Speed
+%  5 - Pressure
+%      0 - Thermal
+%      1 - Magnetic
+%      2 - Turbulent
+%  6 - Magnetic Field (req -DBFLD)
+%      0 - Total 
+%      1 - Orthogonal Component
+%      2 - Faraday Rotation Measurement (RM) (=Smac1*1e-4)
+%      3 - Alven Velocity
+%  7 - SZ Effect
+%      0 - Compton-y (=Smac1 thermal DT/T)
+%      1 - Thermal SZ DT/T
+%      2 - Thermal SZ DI/I
+%      3 - Kinetic SZ DT/T
+%      4 - Kinetic SZ DI/I (untested)
+%  8 - Gamma Ray Emission from CR Secondaries
+%      0 - Differential @ E_min
+%      1 - Integrated over [E_min,E_max]
+%  9 - Synchrotron Emission from CR electrons by
+%      numerical integration of spectrum (I,Q,U,[Ipol,chi,Pi]) 
+%      0 - Secondary Model (Brunetti 05)
+%      1 - Tabulated Spectrum (binary P-Fkp output)
+%      2 - CRe Power law spectrum (= effect 12)
+%      3 - Read from Simulation
+%      4 - as 2 but with normalisation from Simulation (PIERNIK)
+% 11 - DM Annihilation Signal (rho^2)
+% 10 - DM Density
+% 12 - Synchrotron from powerlaw CRe, analytic formula
+%      (fast but imprecise if bulk > E_min, use 9 instead)
+%      0 - CRe fraction ~ thermal energy density
+%      1 - CRe fraction from input (PIERNIK)
+% 13 - Radiative Transfer
+%      0 - Ionised Hydrogen Fraction
+%      1 - Ionised Helium II Fraction
+%      2 - Ionised Helium III Fraction

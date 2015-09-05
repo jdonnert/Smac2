@@ -1,0 +1,77 @@
+%% PSmac Parameter File %%
+   
+Cosmology 2
+
+%% Image Properties in kpc comoving %%
+
+Center_X 3440
+Center_Y -768
+Center_Z -5657
+
+Use_Barycenter 0
+
+Projection 0
+XYSize 2000
+ZDepth 2000
+XYPix 256
+
+Input_File data/snap_092
+N_IOTasks 1
+
+NoClobber 0
+Output_File velocity
+
+Effect_Module 1
+Effect_Flag 0
+
+%% Energy Range [eV]: Xray, Gamma 
+E_min 1e2
+E_max 1e7
+
+%% Frequency [Hz]: Sz,Synchro
+Freq 1.4e9
+
+%% CR proton spectral index (a), amplitude (X)
+a_cr 2.375
+X_cr 0.01
+
+%% Turbulence [yrs],
+t_turb 1e7
+eta_t 0.26
+
+Flag_SizeInArcmin 2
+
+UnitLength_in_cm 			3.085678e21        %  1.0 kpc
+UnitMass_in_g 				1.989e43           %  1.0e10 solar masses
+UnitVelocity_in_cm_per_s 	1e5                %  1 km/sec
+
+%% Effect Methods %%
+%  0 - Physical Density [g/cm^2]
+%  1 - Velocities [cm/s]
+		 0 - Velocity
+		 1 - RMS around central velocity
+		 2 - RMS around mean velocity
+		 3 - Mean Velocity
+%  2 - X-Ray Surface Brightness
+%  3 - Reacceleration Timescale,
+%  4 - Temperature
+%      0 - Mass Weighted
+%      1 - Emission Weighted
+%  5 - Pressure
+%  6 - Magnetic Field (req -DBFLD)
+%      0 - Total 
+%      1 - Orthogonal Component
+%      2 - Faraday Rotation Measurement (RM) (=Smac1*1e-4)
+%  7 - SZ Effect
+%      0 - Compton-y (=Smac1 thermal DT/T)
+%      1 - Thermal SZ DT/T
+%      2 - Thermal SZ DI/I
+%      3 - Kinetic SZ DT/T
+%      4 - Kinetic SZ DI/I (untested)
+%  8 - Gamma Ray Emission from CR Secondaries
+%      0 - Differential @ E_min
+%      1 - Integrated over [E_min,E_max]
+%  9 - Synchrotron Emission from CR electrons (req -DBFLD)
+%      0 - Brunetti's High Energy Secondaries
+% 10 - DM Density
+% 11 - DM Annihilation Signal

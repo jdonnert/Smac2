@@ -1,0 +1,49 @@
+--REQUIREMENTS--
+
+To compile Smac2 one needs : 
+    * MPI - Message Passing Interface
+    * cfitsio - FITS I/O library in c
+    * GSL - GNU Scientic Library
+    * optionally HDF5 >1.8 - The Hierachical Data Format 
+
+Use the SYSTYPE fields to adapt the compilations paths in Makefile.
+
+Smac2 uses the GADGET style Config file for Compiletimesettings.
+This is parsed via sed in the Makefile into src/print_settings.c
+to provide similar functionality without the need for Perl.
+
+I recommend to use O_FITS_COMPRESSED, which will use Rice compression 
+on the image and reduce the file size by a factor of 8 ! The file
+will remain readable with IDL and DS9, only the extension are shifted by
+1, i.e. the image is found with readfits(fname, ext=1) in IDL.
+
+Smac2 now contains an OpenMP parallel tree and neighbour finding, which 
+gives the same results as Gadget3.
+
+--HOW TO ADD AN EFFECT--
+
+1) make your effect function in src/effects/EFFECTNAME.c
+2) put the prototype in src/effects/effect.h
+3) add another case in src/effects/effect.c 
+4) add your effect function file as .o in Makefile
+5) add a desciption at the end of Makefile
+
+
+--HOW TO ADD A BLOCK--
+1) in src/input/gadget.h add your block IO type
+    in the enum
+2) in src/input/gadget.c add your in set_block_prop()
+3) in the same file add it in empty_comm_buffer()
+
+--TODO--
+
+* Improve local sort on pixel number for cache hits
+* Do Healpix projection
+* Read Peano key
+* Add full DM annihilation model instead of rho^2
+* rewrite parser 
+* Mecal X-ray description 
+* peano curve
+* weighted indicator
+
+(c) 2013 J.Donnert: jdonnert@ira.inaf.it

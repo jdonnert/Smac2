@@ -1,0 +1,48 @@
+I_GADGET2                   // Gadget input  
+#I_USER 
+#I_PIERNIK
+
+#O_FITS
+#O_FITS_COMPRESSED           // FPACK-RICE compressed .fits file  
+O_FITS_COMPRESSED_CUBE		// Allow looping one input parameter by giving min max step
+
+#WK_CUBIC                   // Project using cubic spline kernel
+#WK_QUINTIC                 // project using quintic spline kernel
+WK_WC6                      // project using Wendland C6 kernel
+#WK_WC4                      // project using Wendland C6 kernel
+
+## Additional Options ##
+#HEALPIX
+
+POLARISATION
+#ADD_IPOL_CHI_PI 
+#INTRINSIC_RM
+
+RELATIVISTIC_RM_CORRECTION
+
+INSIDEONLY
+
+YAWPITCHROLL                // rotate like an airplane 
+
+## Use Quintic Kernel
+#QUINTIC
+
+#PERIODIC
+
+#Additional Modules
+VTURB
+#RADTRANSFER
+DIVB
+SHOCKS
+VORTICITY
+TIME_DEP_ART_VISC
+#VSPH                        // kernel weighted velocity 
+
+# For hsml finding
+OPENMP
+TREE
+HSMLFIND
+
+# scale secondaries with density via X_crp
+#XCRP_SCALING -1.4
+#CUTOFFSCALE 600.0
