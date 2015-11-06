@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
 		advance_parameter(i);
 #endif
-
+printf("PARAM %g \n", Param.XYSize );
 	set_units();
 
 	select_cosmology(Param.Cosmology);

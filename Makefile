@@ -82,19 +82,18 @@ ifeq ($(SYSTYPE),para33.strw.leidenuniv.nl)
 	HDF5_LIBS    =
 endif
 
-ifeq ($(SYSTYPE),"RZG_ODIN") 
-CC       =  mpiicc
-OPTIMIZE = -O3  -Wall -ipo4 -openmp
-MPI_LIBS = 
-MPI_INCL = 
-GSL_INCL = 
-GSL_LIBS =
-CFITSIO_INCL = -I/u/jdonnert/Libs/include
-CFITSIO_LIBS = -L/u/jdonnert/Libs/lib
-HDF5_INCL =
-HDF5_LIBS =
+ifeq ($(SYSTYPE),MSI)
+	CC           =  mpicc
+	OPTIMIZE     =  -g -O3  -xhost -ipo4
+	MPI_LIBS     =  -lmpich 
+	MPI_INCL     = 
+	GSL_INCL     = 
+	GSL_LIBS     = 
+	CFITSIO_INCL =
+	CFITSIO_LIBS =
+	HDF5_INCL    =
+	HDF5_LIBS    =
 endif
-
 
 EXEC	= P-Smac2
 

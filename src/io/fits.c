@@ -126,6 +126,14 @@ void move_image_to_cube(const int k)
 	
 	Reallocate_P(Task.PartTotal, Task.Npart, -1);
 
+	Param.Center[0] /= Comv2phys.Length; // prepare for next time
+	Param.Center[1] /= Comv2phys.Length;
+	Param.Center[2] /= Comv2phys.Length;
+
+
+	Param.XYSize /= Comv2phys.Length;
+	Param.ZDepth /= Comv2phys.Length;
+
 	return ;
 }
 
