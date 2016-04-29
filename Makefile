@@ -95,7 +95,7 @@ ifeq ($(SYSTYPE),MSI)
 	HDF5_LIBS    =
 endif
 
-EXEC	= Smac2
+EXEC	= P-Smac2
 
 SRCDIR	= src
 

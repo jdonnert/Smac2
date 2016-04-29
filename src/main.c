@@ -38,18 +38,18 @@ int main(int argc, char *argv[])
 
 	read_param_file(argv[1]);
 
+	set_units();
+	
+	select_cosmology(Param.Cosmology);
+
+	select_effect_module(Param.Effect_Module);
+
 #ifdef O_FITS_COMPRESSED_CUBE
 	for (int i = 0; i < Param.NCube; i++) {
 
 		advance_parameter(i);
 #endif
 	
-	set_units();
-
-	select_cosmology(Param.Cosmology);
-
-	select_effect_module(Param.Effect_Module);
-
 	read_snapshot(Param.Input_File);
 	
 	Remove_Unused_Particles();
@@ -124,7 +124,7 @@ void advance_parameter(const int i)
 	if (i == 0)
 		return;
 	
-	rprintf("New Iteration: %d\n", i);
+	rprintf("\nNew Iteration: %d\n\n", i);
 
 	switch (Param.CubeType) {
 	
