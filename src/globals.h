@@ -1,34 +1,3 @@
-/*Here we define common variables and functions, used in many routines*/
-/*PLEASE use sensible names. Example: m_p is better than prtn for proton mass*/
-
-/* INCLUDES */
-#include <stdlib.h>		// system
-#include <stdio.h>
-#include <stdint.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
-#include <math.h>
-#include <limits.h>
-
-#include <mpi.h>		// Parallel Env, MPI & OpenMP
-#include <omp.h>
-
-#include <gsl/gsl_math.h>	// GNU Scientific Library
-#include <gsl/gsl_const_cgsm.h>
-#include <gsl/gsl_const_num.h>
-
-#include "config.h"		// Our compiletime options
-
-#include "proto.h"		// We need those everywhere
-#include "cosmo.h"
-#include "unit.h"
-#include "timing.h"
-#include "macro.h"
-#include "constants.h"
-
 /* CODE PARAMETERS */
 #define N_part_types 6		// Number of particle species
 

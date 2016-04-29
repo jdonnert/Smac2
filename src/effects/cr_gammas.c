@@ -4,6 +4,7 @@
  * gas. (Pfrommer & Ensslin 2004)
  */
 
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 #include <gsl/gsl_sf_gamma.h>

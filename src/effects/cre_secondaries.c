@@ -3,6 +3,7 @@
  * (Crossection High Energy approximation) 
  * */
 
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 

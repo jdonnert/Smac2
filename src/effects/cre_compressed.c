@@ -1,3 +1,5 @@
+
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 #include "cre_compressed.h"

@@ -3,6 +3,7 @@
  * Bartelmann & Steinmetz 1996 eqn 3
  * */
 
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 

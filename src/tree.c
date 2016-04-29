@@ -1,3 +1,4 @@
+#include "proto.h"
 #include "globals.h"
 #include "tree.h"
 
@@ -70,7 +71,7 @@ extern void Build_tree()
 
 	tree[0].npart -= 2;
 
-	printf("done \nUsing %zu of max. %zu treenodes for %zu particles \n",
+	printf("done \nUsing %zu of max. %zu treenodes for %d particles \n",
 	       treesize, max_tree_size, Task.PartTotal);
 
 	stop_timing(CPU_TREE);

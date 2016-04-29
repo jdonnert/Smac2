@@ -1,3 +1,4 @@
+#include "proto.h"
 #include "globals.h"
 #include "tree.h"
 
@@ -9,7 +10,7 @@ static bool find_hsml(const int ipart, const int *ngblist, const int ngbcnt,
 
 static void calc_derived_kernel_quantities();
 
-extern void find_SPH_densities()
+extern void Find_SPH_Densities()
 {
 	Build_tree();
 
@@ -23,6 +24,8 @@ extern void find_SPH_densities()
 		schedule(dynamic, Task.PartTotal/Omp.NThreads/64)
 	for (size_t ipart = 0; ipart < Task.PartTotal; ipart++) {
 		
+		
+
 		if (ipart % counter_const == 0)
 			rprintf(".");
 
@@ -30,8 +33,8 @@ extern void find_SPH_densities()
 
         if (hsml == 0)
             hsml = Guess_hsml(ipart, DESNNGB); // always too large
-
-        float dRhodHsml = 0;
+        
+		float dRhodHsml = 0;
         float rho = 0;
 
         for (;;) {

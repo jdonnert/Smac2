@@ -1,5 +1,6 @@
 /* Center the image and apply the projection */
 
+#include "proto.h"
 #include "globals.h"
 
 #ifdef HEALPIX
@@ -253,7 +254,7 @@ void set_barycenter()
 
 
 /* This removes unused particle _types_ only. */
-void remove_unused_particles()
+void Remove_Unused_Particles()
 {
 	int nLeft = Task.PartTotal;
 

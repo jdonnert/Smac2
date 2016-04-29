@@ -1,3 +1,4 @@
+#include "../proto.h"
 #include "../globals.h"
 
 #include <fitsio.h>
@@ -119,17 +120,25 @@ void move_image_to_cube(const int k)
 	
 	Image = NULL; Weight_Image = NULL;
 
-	if (tree != NULL)
-		Free(tree); 
+	Free(tree); 
 	
 	tree = NULL;
 	
-	Reallocate_P(Task.PartTotal, Task.Npart, -1);
+	if (Task.Npart[0] != 0)
+		Free(Gas);
+
+	if (Task.PartTotal != 0)
+		Free(P);
+
+	P = Gas = NULL;
+
+	Task.PartTotal = 0;
+	for (int i = 0; i < N_part_types; i++)
+		Task.Npart[i] = 0;
 
 	Param.Center[0] /= Comv2phys.Length; // prepare for next time
 	Param.Center[1] /= Comv2phys.Length;
 	Param.Center[2] /= Comv2phys.Length;
-
 
 	Param.XYSize /= Comv2phys.Length;
 	Param.ZDepth /= Comv2phys.Length;
@@ -146,8 +155,8 @@ void write_output()
 	const int npix2 = Param.XYPix * Param.XYPix;
 	const int ncube = Param.NCube;
 
-	const long naxes[3] = { Param.XYPix, Param.XYPix, ncube };
-	const long naxis = 3;
+	long naxes[3] = { Param.XYPix, Param.XYPix, ncube };
+	long naxis = 3;
 
 	if (Task.Rank == 0) {
 

@@ -217,7 +217,7 @@ pro fits_view2, fin, range=range, ext=ext, fout=fout, unit=unit, $
     if not keyword_set(silent) then begin
         print, 'Fits_view2 - IDL fits plotting'
 		print, 'Input from ', fin
-        print, 'Output to ',fout
+        print, 'O	utput to ',fout
     end
     
     ; set parameters
@@ -318,6 +318,7 @@ pro fits_view2, fin, range=range, ext=ext, fout=fout, unit=unit, $
 
     if not keyword_set(frame_charsize) then $
         frame_charsize = min([0.8 , 0.6 * charsize * 3/XYimg[0]] )  
+
 	; norm to 0.6 at 3 ximages
 
     ; set document
@@ -400,8 +401,8 @@ pro fits_view2, fin, range=range, ext=ext, fout=fout, unit=unit, $
         text_pos = make_array(2,/double)
         text_pos[0] = (img_pos[0] + text_offset[0]) / doc_size[0]  ; [normal]
         text_pos[1] = (img_pos[1] + img_size[1] - text_offset[1]) / doc_size[1]  ; [normal]
-
-        if (size(text))[0] ne 0 then begin
+        
+		if n_elements(text) gt 1 then begin
 
              xyouts, text_pos[0], text_pos[1], text[i], $
                 col=color(txtct[i]), /normal, charsize=1.5*frame_charsize 
@@ -434,8 +435,8 @@ pro fits_view2, fin, range=range, ext=ext, fout=fout, unit=unit, $
         xtickname = replicate(' ',10)
 
         if frame ne 0 then begin
-print, "IN", frame, color(txtct[i]), txtct[i]
-            if column eq 0 then $
+            
+			if column eq 0 then $
                 plot, [1],/nodata,/noerase,position=[xstart,ystart,xend,yend]$
                     , xrange=[0,xmax], xtitle=' ',xstyle=1, xtickname=xtickname $
                     , yrange=[0,ymax], ytitle=ytitle, ystyle=1 , col=color(txtct[i])$
@@ -457,18 +458,18 @@ print, "IN", frame, color(txtct[i]), txtct[i]
  			set_txtct, txtct, i, img_res, img
         
             text_pos = make_array(2,/double)
-            text_pos[0] = (img_pos[0] + 0.8 * img_size[0]  ) / doc_size[0]  ; [normal]
+            text_pos[0] = (img_pos[0] + 0.7 * img_size[0]  ) / doc_size[0]  ; [normal]
             text_pos[1] = (img_pos[1] + 0.1 * img_size[1]) / doc_size[1]  ; [normal]
 
             if i eq 0 then begin
 
-                xysize =  head_find(fin[0],'XYSize', ext=ext)
-                
+                xysize = head_find(fin[0],'XYSize', ext=ext) / double(zoom)
+    
                 if not exist(bartext) then begin
-                    bartext = '['+strn(FIX(xysize))+' kpc]!U2!N'
+                    bartext = '['+strn(xysize, len=3)+' kpc]!U2!N'
                     
-                    if xysize gt 1e3 then $
-                        bartext = '['+strn(FIX(xysize/1000/zoom))+' Mpc]!U2!N'
+				if xysize gt 1e3 then $
+                    bartext = '['+strn(xysize/1000L,len=3)+' Mpc]!U2!N'
                 end
 
                 xyouts, text_pos[0], text_pos[1], bartext, $
@@ -491,14 +492,16 @@ print, "IN", frame, color(txtct[i]), txtct[i]
 			if not keyword_set(cont_label) then $
 				cont_label = replicate('', Nimg)
 
-    		if not keyword_set(cont_charsize) then $
-				cont_charsize = charsize / 5
+    		if not keyword_set(cont_charsize[i]) then $
+				cont_charsize[i] = charsize / 5
 
  			if cont_inv[i] eq 0 then $
 				cont_col = replicate('White', Nimg) $
 			else $
 				cont_col = replicate('Black', Nimg) 
 			
+			print, 'Reading Contours from ', cont_fin[i]
+
 			img = readfits(cont_fin[i], /silent, ext=ext) * cont_factor[i]
 
 	        img = zoom_image(img, zoom)
@@ -523,7 +526,7 @@ print, "IN", frame, color(txtct[i]), txtct[i]
 				xtickname=replicate(' ',10), $
 	            c_thick=replicate(cont_thick[i], nlevels), $
 				xthick=xythick, ythick=xythick, $
-            	c_charsize=cont_charsize, ytickname=replicate(' ',10), $
+            	c_charsize=cont_charsize[i], ytickname=replicate(' ',10), $
         	    xticks=1, yticks=1, xminor=1, yminor=1, $ 
 				c_colors=cont_col[i], label=cont_label[i] 
     	end
@@ -573,7 +576,7 @@ print, "IN", frame, color(txtct[i]), txtct[i]
         plot, [1.1],/nodata,/noerase,position=[xstart,ystart,xend,yend], $
             xrange=colbar_range, xlog=log[0],yticks=1, xtitle=unit,xstyle=1, $
             yminor=1,xticklen=0.28, ytickname=REPLICATE(' ',2), $
-            charsize = charsize, xthick=xythick, ythick=xythick, xticks=bar_nticks
+            charsize = 1.5*frame_charsize, xthick=xythick, ythick=xythick, xticks=bar_nticks
     end
 
 

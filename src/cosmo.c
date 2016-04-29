@@ -2,6 +2,7 @@
  * We set Cosmo to one of the others 
  * */
 
+#include "proto.h"
 #include "globals.h"
 
 struct cosmology Cosmo;

@@ -2,6 +2,7 @@
  * set in synchro_factors (Donnert & Brunetti 2014)
  * */
 
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 

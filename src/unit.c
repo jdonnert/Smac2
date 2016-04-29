@@ -16,6 +16,7 @@
  * file. 
  * */
 
+#include "proto.h"
 #include "globals.h"
 
 struct units Unit;

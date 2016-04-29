@@ -2,6 +2,7 @@
  * User defined Pseudo Snapshot for testing purposes 
  */
 
+#include "../proto.h"
 #include "../globals.h"
 
 #ifdef I_USER

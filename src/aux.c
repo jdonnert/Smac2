@@ -1,4 +1,5 @@
 /*Here we initialise the common variables*/
+#include "proto.h"	
 #include "globals.h"
 
 /* Global Variables */
@@ -99,21 +100,8 @@ extern void Reallocate_P(int partTotal, int nPart[N_part_types], int sign)
 
 	if (nPart[0] != 0) 
 		Gas = Realloc((void *)Gas, sizeof(*Gas) * Task.Npart[0]);
-
-	if (Task.Npart[0] == 0) {
-	
-		free(Gas);
-			
+	else
 		Gas = NULL;
-
-	}
-	
-	if (Task.PartTotal == 0) {
-	
-		free(P);
-			
-		P = NULL;
-	}
 
 	return;
 }

@@ -1,4 +1,5 @@
 /* All kinds of crazy velocities */
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 

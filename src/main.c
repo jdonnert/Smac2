@@ -19,7 +19,9 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  * */
 
+#include "proto.h"
 #include "globals.h"
+#include "tree.h"
 #include "effects/effects.h"
 
 static void preamble(int, char **);
@@ -41,7 +43,7 @@ int main(int argc, char *argv[])
 
 		advance_parameter(i);
 #endif
-printf("PARAM %g \n", Param.XYSize );
+	
 	set_units();
 
 	select_cosmology(Param.Cosmology);
@@ -50,10 +52,10 @@ printf("PARAM %g \n", Param.XYSize );
 
 	read_snapshot(Param.Input_File);
 	
-	remove_unused_particles();
+	Remove_Unused_Particles();
 
 	if (Effect.Req.Tree)
-  		find_SPH_densities();
+  		Find_SPH_Densities();
 
 	setup();
 

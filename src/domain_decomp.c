@@ -2,6 +2,7 @@
  * Distribute the rest evxenly over all CPUs
  * */
 
+#include "proto.h"
 #include "globals.h"
 #include "effects/effects.h"
 #include <gsl/gsl_sort.h>

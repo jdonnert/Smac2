@@ -1,5 +1,6 @@
 /* Artifiscial CR electron power law spectrum   */
 
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 

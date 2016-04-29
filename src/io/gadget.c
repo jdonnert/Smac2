@@ -1,4 +1,6 @@
-/* Read Gadget/Arepo data format 2 */
+/* Read Gadget data format 2 */
+
+#include "../proto.h"
 #include "../globals.h"
 #include "gadget.h"
 
@@ -222,7 +224,7 @@ void read_file(char *filename, int ReadTask, int LastTask)
 
 			if (blockExist > 0) {
 
-				printf("%28s %8zu Mb\n", Block.Name,
+				printf("%28s %8d Mb\n", Block.Name,
 				       blockExist / 1024 / 1024);
 
 				comm_buf =

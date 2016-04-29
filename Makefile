@@ -17,11 +17,11 @@ CFITSIO_LIBS =
 HDF5_INCL =
 HDF5_LIBS =
 
-ifeq ($(SYSTYPE),DARWIN)
+ifeq ($(SYSTYPE),DARWIN) #icc
 CC      	 =  mpicc
-OPTIMIZE	 = -Ofast -Wall -mtune=native -march=corei7
-MPI_LIBS 	 = -lmpich -L/Users/julius/Devel/lib
-MPI_INCL 	 = -I/Users/julius/Devel/include
+OPTIMIZE	 = -Ofast -Wall
+MPI_LIBS 	 = -lmpich -L/Users/jdonnert/Dev/lib
+MPI_INCL 	 = -I/Users/jdonnert/Dev/include
 GSL_INCL 	 =  
 GSL_LIBS	 = 
 CFITSIO_INCL = 
@@ -43,7 +43,7 @@ HDF5_INCL 	 =
 HDF5_LIBS    =
 endif
 
-ifeq ($(SYSTYPE),mach64.ira.inaf.it)
+ifeq ($(SYSTYPE),mach64.ira.inaf.it) # gcc
 CC      	 =  mpicc
 OPTIMIZE	 =  -g -O2  -march=bdver1 -mtune=native -mprefer-avx128 -mieee-fp -flto 
 MPI_LIBS 	 =  -lmpich -L/homes/donnert/Libs/lib 
@@ -95,74 +95,58 @@ ifeq ($(SYSTYPE),MSI)
 	HDF5_LIBS    =
 endif
 
-EXEC	= P-Smac2
+EXEC	= Smac2
 
-SRCDIR	= src/
+SRCDIR	= src
 
-OBJFILES= aux.o setup.o main.o domain_decomp.o \
-		  project_sph.o timing.o tree.o  \
-		  unit.o cosmo.o healpix.o print_settings.o sph.o \
-		  io/input.o \
-			io/gadget.o \
-			io/user.o \
-			io/fits.o \
-		  effects/effects.o \
-		  	effects/density.o \
-			effects/velocity.o \
-			effects/fkp.o \
-			effects/pressure.o \
-			effects/temp.o \
-			effects/xray.o \
-			effects/bfld.o \
-			effects/sz.o \
-			effects/cr_gammas.o \
-			effects/synchrotron.o \
-			effects/analytic_synchrotron.o \
-			effects/cre_secondaries.o \
-			effects/cre_powerlaw.o \
-			effects/cre_tabulated.o \
-			effects/cre_compressed.o \
-			effects/dm_annihilation.o \
-			effects/rm.o \
-			effects/radtransfer.o \
-			effects/coulomb.o \
-			effects/shocks.o
+SRCFILES := ${shell find $(SRCDIR) -name \*.c -print}
 
+ifeq (,$(wildcard $(SRCDIR)/print_settings.c)) # add if missing
+SRCFILES += $(SRCDIR)/print_settings.c
+endif
 
-OBJS	= $(addprefix $(SRCDIR),$(OBJFILES))
+OBJFILES = $(SRCFILES:.c=.o)
 
-INCLFILES	= globals.h  tree.h cosmo.h unit.h timing.h  config.h proto.h \
-			  macro.h constants.h \
-			  io/gadget.h \
-			  		io/fits.h \
-			  effects/effects.h \
-			  ../Makefile
+INCLFILES := ${shell find src -name \*.h -print}
+INCLFILES += Config Makefile $(SRCDIR)/config.h
 
-INCL	= $(addprefix $(SRCDIR),$(INCLFILES))
+CFLAGS = -fopenmp -std=c99 $(OPTIMIZE) $(CFITSIO_INCL) $(GSL_INCL) $(MPI_INCL)
 
-CFLAGS	= -fopenmp -std=c99 $(OPTIMIZE) $(CFITSIO_INCL) $(GSL_INCL) $(MPI_INCL)
+LIBS = -lm -lgsl -lgslcblas -lcfitsio $(MPI_LIBS) $(GSL_LIBS) $(CFITSIO_LIBS) 
 
-LIBS	= -lm -lgsl -lgslcblas -lcfitsio \
-		  $(MPI_LIBS) $(GSL_LIBS) $(CFITSIO_LIBS) 
+%.o : %.c
+	@echo [CC] $@
+	@$(CC) $(CFLAGS)  -o $@ -c $<
 
-$(EXEC)	: $(OBJS)
-	$(CC) $(CFLAGS)  $(OBJS)  $(LIBS) -o $(EXEC)
-	cd src && ctags  *.[ch]
+$(EXEC)	: settings $(OBJFILES)
+	$(CC) $(CFLAGS)  $(OBJFILES)  $(LIBS) -o $(EXEC)
+	@ctags $(SRCFILES) $(INCLUDEFILES)
 
-$(OBJS)	: $(INCL)
+$(OBJFILES)	: $(INCLFILES)
 
-$(SRCDIR)config.h : Config 
-	sed '/^#/d; /^$$/d; s/^/#define /g' Config > $(SRCDIR)config.h
+$(SRCDIR)/config.h : Config 
+	@echo 'Config -> config.h'
+	@sed '/^#/d; /^$$/d; s/^/#define /g' Config > $(SRCDIR)/config.h
 
-$(SRCDIR)print_settings.c : Config
-	echo '#include "globals.h"' >  $(SRCDIR)print_settings.c
-	echo 'void print_compile_time_settings(){' >> $(SRCDIR)print_settings.c
-	echo 'rprintf("Compiled with : \n"' >> $(SRCDIR)print_settings.c
-	sed '/^#/d; /^$$/d; s/^/"   /g; s/$$/ \\n"/g;' Config >>  $(SRCDIR)print_settings.c
-	echo ');}' >> $(SRCDIR)print_settings.c
+$(SRCDIR)/print_settings.c : Config
+	@echo '-> print_settings.c'
+	@echo '#include "proto.h"' >  $(SRCDIR)/print_settings.c
+	@echo '#include "globals.h"' >>  $(SRCDIR)/print_settings.c
+	@echo 'void print_compile_time_settings(){' >> $(SRCDIR)/print_settings.c
+	@echo 'rprintf("Compiled with : \n"' >> $(SRCDIR)/print_settings.c
+	@sed '/^#/d; /^$$/d; s/^/"   /g; s/$$/ \\n"/g;' Config >> $(SRCDIR)/print_settings.c
+	@echo ');}' >> $(SRCDIR)/print_settings.c
 
-clean		: 
-	rm -f  $(OBJS) $(EXEC) src/config.h src/print_settings.c
+.PHONY : settings
+	
+settings : 
+	@echo " "
+	@echo 'CC = ' $(CC)
+	@echo 'CFLAGS =' $(CFLAGS)
+	@echo 'LDFLAGS =' $(LIBS)
+	@echo 'EXEC =' $(EXEC)
+	@echo " "
 
-install	: 
-	cp -i $(EXEC) ~/bin
+clean : 
+	rm -f  $(OBJFILES) $(EXEC) src/config.h src/print_settings.c
+

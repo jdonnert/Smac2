@@ -3,6 +3,7 @@
  * effect (e.g. Springel,White,Hernquist 2001)
  * */
 
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 

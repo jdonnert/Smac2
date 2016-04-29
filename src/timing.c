@@ -1,5 +1,6 @@
 /* Timings & Benchmarking */
 
+#include "proto.h" 
 #include "globals.h"
 
 struct Timings Cpu = { 0 };

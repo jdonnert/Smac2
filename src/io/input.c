@@ -1,4 +1,5 @@
 /* Common input functions */
+#include "../proto.h"
 #include "../globals.h"
 
 #define LASTPARAMETERID -1111

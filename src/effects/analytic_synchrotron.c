@@ -6,6 +6,7 @@
  * thermal plasma at a normalisation energy. eps_therm = \int E N(E) dE, 
  */
 
+#include "../proto.h"
 #include "../globals.h"
 #include "effects.h"
 

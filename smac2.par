@@ -10,8 +10,8 @@ Center_Z 1500
 
 Use_Barycenter 0    % 1 - set to, 2 - set relative to barycenter
 
-XYSize 3000        % set these two ==0 to project whole box
-ZDepth 100
+XYSize 0        % set these two ==0 to project whole box
+ZDepth 0
 XYPix 256
 
 %% Projection, see description at EOF %%
@@ -28,7 +28,7 @@ Rmax 1000000
 
 %% I/O Options %% 
 
-Input_File ../run_long_cond/snap_010
+Input_File snap_161 snap_163 1
 N_IOTasks 1
 
 NoClobber 0
@@ -37,8 +37,8 @@ Output_File test.fits
 
 %% Effect Selection & Options %%
 
-Effect_Module 1
-Effect_Flag 12
+Effect_Module 10
+Effect_Flag 0
 
 E_min 1e0           % Energy Range [eV]: Xray, Gamma, Synchro
 E_max 1e1
