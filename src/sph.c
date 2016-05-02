@@ -24,8 +24,6 @@ extern void Find_SPH_Densities()
 		schedule(dynamic, Task.PartTotal/Omp.NThreads/64)
 	for (size_t ipart = 0; ipart < Task.PartTotal; ipart++) {
 		
-		
-
 		if (ipart % counter_const == 0)
 			rprintf(".");
 
@@ -33,7 +31,7 @@ extern void Find_SPH_Densities()
 
         if (hsml == 0)
             hsml = Guess_hsml(ipart, DESNNGB); // always too large
-        
+		
 		float dRhodHsml = 0;
         float rho = 0;
 
@@ -150,7 +148,7 @@ static bool find_hsml(const int ipart, const int *ngblist, const int ngbcnt,
 
         if (it > 60) {
 
-            printf("<%d> Hsml iteration reached 30: ipart=%d up=%g lo=%g h=%g "
+            printf("<%d> Hsml iteration reached 60: ipart=%d up=%g lo=%g h=%g "
                     "Ngbcnt=%d wkNgb=%g DesNngb=%d \n"
                     "x=%g y=%g z=%g upstart=%g, deltas= %g %g %g\n", 
                     Omp.ThreadID, ipart, upper, lower, hsml, ngbcnt, wkNgb, 
@@ -172,8 +170,6 @@ static bool find_hsml(const int ipart, const int *ngblist, const int ngbcnt,
             
             hsml *= 1.26; // double volume
             
-            //printf("Repeat %d %d %g %g \n", ipart, ngbcnt, hsml, wkNgb);
-
             break;
         }
 

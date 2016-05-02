@@ -100,7 +100,11 @@ extern void Reallocate_P(int partTotal, int nPart[N_part_types], int sign)
 
 	if (nPart[0] != 0) 
 		Gas = Realloc((void *)Gas, sizeof(*Gas) * Task.Npart[0]);
-	else
+	
+	if (Task.PartTotal == 0)
+		P = NULL;
+
+	if (Task.Npart[0] == 0)
 		Gas = NULL;
 
 	return;

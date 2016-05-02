@@ -8,11 +8,11 @@ Center_X 1500
 Center_Y 1500
 Center_Z 1500
 
-Use_Barycenter 0    % 1 - set to, 2 - set relative to barycenter
+Use_Barycenter 1    % 1 - set to, 2 - set relative to barycenter
 
-XYSize 0        % set these two ==0 to project whole box
-ZDepth 0
-XYPix 256
+XYSize 5000        % set these two ==0 to project whole box
+ZDepth 5000
+XYPix 1024
 
 %% Projection, see description at EOF %%
 Euler_Angle_0 0    % [deg] along x : (0,90,90)

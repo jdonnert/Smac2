@@ -130,7 +130,8 @@ void move_image_to_cube(const int k)
 	if (Task.PartTotal != 0)
 		Free(P);
 
-	P = Gas = NULL;
+	P = NULL;
+	Gas = NULL;
 
 	Task.PartTotal = 0;
 	for (int i = 0; i < N_part_types; i++)
