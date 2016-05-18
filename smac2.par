@@ -10,8 +10,8 @@ Center_Z 1500
 
 Use_Barycenter 1    % 1 - set to, 2 - set relative to barycenter
 
-XYSize 5000        % set these two ==0 to project whole box
-ZDepth 5000
+XYSize 8000        % set these two ==0 to project whole box
+ZDepth 8000
 XYPix 1024
 
 %% Projection, see description at EOF %%
@@ -37,7 +37,7 @@ Output_File test.fits
 
 %% Effect Selection & Options %%
 
-Effect_Module 10
+Effect_Module 0
 Effect_Flag 0
 
 E_min 1e0           % Energy Range [eV]: Xray, Gamma, Synchro

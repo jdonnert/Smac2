@@ -8,8 +8,6 @@
 #include <chealpix.h>
 #endif
 
-static void set_barycenter();
-
 #ifndef HEALPIX			// Normal image
 static void apply_projection();
 #endif
@@ -37,9 +35,6 @@ void setup()
 	Param.Center[0] *= Comv2phys.Length;
 	Param.Center[1] *= Comv2phys.Length;
 	Param.Center[2] *= Comv2phys.Length;
-
-	if (Param.Flag_Barycenter)
-		set_barycenter();
 
 	#pragma omp parallel for
 	for (int ipart = 0; ipart < Task.PartTotal; ipart++) {
@@ -210,7 +205,7 @@ void apply_projection()
 
 static double mtot = 0, buf[3] = { 0 };
 
-void set_barycenter()
+void Set_Barycenter()
 {
  	mtot = buf[0] = buf[1] = buf[2] = 0;
 	
@@ -233,7 +228,7 @@ void set_barycenter()
 
 	if (Param.Flag_Barycenter == 2) {
 
-		rprintf("Setting Center relative to Barycenter \n");
+		rprintf("Setting Center relative to Barycenter ");
 
 		Param.Center[0] += buf[0];
 		Param.Center[1] += buf[1];
@@ -241,12 +236,14 @@ void set_barycenter()
 
 	} else {
 
-		rprintf("Setting center to Barycenter \n");
+		rprintf("Setting center to Barycenter ");
 
 		Param.Center[0] = buf[0];
 		Param.Center[1] = buf[1];
 		Param.Center[2] = buf[2];
 	}
+
+	rprintf("%g %g %g \n", Param.Center[0], Param.Center[1], Param.Center[2]);
 
 	return;
 }

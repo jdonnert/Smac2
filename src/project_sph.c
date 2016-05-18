@@ -105,10 +105,10 @@ void project()
 		int jMin = fmax(floor(y - hsml), 0);
 		int jMax = fmin(floor(y + hsml) + 1, npix);
 
-		bool is_undersampled = false; // distribute via area overlap
+		bool is_undersampled = false; 
 
 		if (hsml <= SAMPLING_SCALE)
-			is_undersampled = true;
+			is_undersampled = true; // distribute via area overlap only
 
 		double distr_weight = 0, distr_area = 0; 
 		int n_distr_pix = 0;
@@ -170,7 +170,7 @@ void project()
 			} // j
 		} // i
 
-		float weight_per_pix = n_distr_pix / distr_weight;
+		float weight_per_pix = n_distr_pix / distr_weight; // inverse ...
 
 		float kernel_norm = area / n_distr_pix;
 

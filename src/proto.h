@@ -35,6 +35,7 @@ void find_DM_densities();
 void write_output();
 void select_effect_module(int choice);
 void Remove_Unused_Particles();
+void Set_Barycenter();
 extern void Find_SPH_Densities();
 void domain_decomposition();
 void project();

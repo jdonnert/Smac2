@@ -51,7 +51,10 @@ int main(int argc, char *argv[])
 #endif
 	
 	read_snapshot(Param.Input_File);
-	
+
+	if (Param.Flag_Barycenter)
+		Set_Barycenter();
+
 	Remove_Unused_Particles();
 
 	if (Effect.Req.Tree)
