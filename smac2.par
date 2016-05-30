@@ -16,7 +16,7 @@ XYPix 1024
 
 %% Projection, see description at EOF %%
 Euler_Angle_0 0    % [deg] along x : (0,90,90)
-Euler_Angle_1 0    % [deg] along y : (0,90,0)
+Euler_Angle_1 1    % [deg] along y : (0,90,0)
 Euler_Angle_2 0     % [deg] along z : (0,0,0)
 
 %% HEALPIX %%
@@ -28,7 +28,7 @@ Rmax 1000000
 
 %% I/O Options %% 
 
-Input_File snap_161 snap_163 1
+Input_File snap_161 
 N_IOTasks 1
 
 NoClobber 0

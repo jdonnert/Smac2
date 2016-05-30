@@ -113,9 +113,6 @@ void apply_projection()
 	if (!phi && !theta && !psi)
 		return;		// nothing to do 
 
-	const int partTotal = Task.PartTotal;
-	const int *npart = Task.Npart;
-
 	/* Define rotation matrix */
 
 #ifdef YAWPITCHROLL	// Luftfahrtnorm (DIN 9300) (Yaw-Pitch-Roll, Z, Y’, X’’)
@@ -146,13 +143,14 @@ void apply_projection()
 
 	/* P */
 
-	float x[3] = { 0 };
-	const size_t nBytes = 3 * sizeof(*x);
+	const size_t nBytes = 3 * sizeof(double);
 
 	#pragma omp parallel for
-	for (int ipart = 0; ipart < partTotal; ipart++) {
+	for (int ipart = 0; ipart < Task.PartTotal; ipart++) {
 
-		memcpy(&x, P[ipart].Pos, nBytes);
+		double x[3] = { P[ipart].Pos[0], P[ipart].Pos[1], P[ipart].Pos[2] };
+
+		//memcpy(&x, &P[ipart].Pos[0], nBytes);
 		
 		P[ipart].Pos[0] =
 		    A[0][0] * x[0] + A[0][1] * x[1] + A[0][2] * x[2];
@@ -161,8 +159,10 @@ void apply_projection()
 		P[ipart].Pos[2] =
 		    A[2][0] * x[0] + A[2][1] * x[1] + A[2][2] * x[2];
 
-		memcpy(&x, P[ipart].Vel, nBytes);
-		
+		x[0] = P[ipart].Vel[0]; 
+		x[1] = P[ipart].Vel[1]; 
+		x[2] = P[ipart].Vel[2];
+
 		P[ipart].Vel[0] =
 		    A[0][0] * x[0] + A[0][1] * x[1] + A[0][2] * x[2];
 		P[ipart].Vel[1] =
@@ -173,10 +173,16 @@ void apply_projection()
 
 	/* Gas */
 	#pragma omp parallel for
-	for (int ipart = 0; ipart < npart[0]; ipart++) {
+	for (int ipart = 0; ipart < Task.Npart[0]; ipart++) {
 
-		memcpy(&x, Gas[ipart].Bfld, nBytes);
+		double x[3] = { 0 };
+
+		memcpy(&x, &Gas[ipart].Bfld[0], nBytes);
 		
+		x[0] = Gas[ipart].Bfld[0]; 
+		x[1] = Gas[ipart].Bfld[1];
+		x[2] = Gas[ipart].Bfld[2];
+
 		Gas[ipart].Bfld[0] =
 		    A[0][0] * x[0] + A[0][1] * x[1] + A[0][2] * x[2];
 		Gas[ipart].Bfld[1] =
@@ -185,7 +191,9 @@ void apply_projection()
 		    A[2][0] * x[0] + A[2][1] * x[1] + A[2][2] * x[2];
 
 #ifdef VTURB
-		memcpy(&x, Gas[ipart].VBulk, nBytes);
+		x[0] = Gas[ipart].VBulk[0]; 
+		x[1] = Gas[ipart].VBulk[1];		
+		x[2] = Gas[ipart].VBulk[2];
 
 		Gas[ipart].VBulk[0] =
 		    A[0][0] * x[0] + A[0][1] * x[1] + A[0][2] * x[2];
