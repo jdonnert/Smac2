@@ -804,6 +804,7 @@ void select_effect_module(int choice)
 	
 		strcpy(Effect.Req.Block[iEffect++], "U   ");
 		strcpy(Effect.Req.Block[iEffect++], "BFLD");
+		strcpy(Effect.Req.Block[iEffect++], "MACH");
 	
 		sprintf(message, "CR Spectral Index s = %1.4f \nX_CRp = %g\n", 
 				Param.a_crp, Param.X_crp);

@@ -25,10 +25,9 @@ NSide 32
 Rmin 1000
 Rmax 1000000
 
-
 %% I/O Options %% 
 
-Input_File snap_161 
+Input_File ../0.4_50_0.8_1.8/snap_015
 N_IOTasks 1
 
 NoClobber 0
@@ -37,18 +36,18 @@ Output_File test.fits
 
 %% Effect Selection & Options %%
 
-Effect_Module 0
-Effect_Flag 0
+Effect_Module 12
+Effect_Flag 2
 
-E_min 1e0           % Energy Range [eV]: Xray, Gamma, Synchro
-E_max 1e1
+E_min 5e4             % Energy Range [eV]: Xray, Gamma, Synchro
+E_max 1e10
 
 Freq 1.4e9          % Frequency [Hz]: Sz,Synchro
 
 a_cr 2.375          % CR spectral index
 X_cr 0.01           % CR Normalisation rel. thermal
-IntrRM 1            % Toggle Intrinsic RM
-PitchAngInt 0       % Toggle Pitch angle integration
+IntrRM 0            % Toggle Intrinsic RM
+PitchAngInt 1       % Toggle Pitch angle integration
 
 t_turb 1e7          % Reacceleration Timescale Cassano 05
 eta_t 0.26          % Fraction turb. Energy in magnetosonic waves
@@ -129,6 +128,7 @@ UnitVelocity_in_cm_per_s 	1e5                %  1 km/sec
 %      (fast but imprecise if bulk > E_min, use 9 instead)
 %      0 - CRe fraction ~ thermal energy density
 %      1 - CRe fraction from input (PIERNIK)
+%	   2 - CRe from Mach number (relics)
 % 13 - Radiative Transfer
 %      0 - Ionised Hydrogen Fraction
 %      1 - Ionised Helium II Fraction

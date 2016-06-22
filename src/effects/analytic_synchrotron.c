@@ -12,12 +12,18 @@
 
 #include <gsl/gsl_sf_gamma.h>
 
-#define s Param.a_crp
 #define nu Param.Freq
 
-static double prefac = 0, cre_spec_norm = 0;
+static double cre_spec_norm_parfile(int ipart);
+static double cre_spec_idx_parfile(int ipart);
+static double cre_spec_norm_particle(int ipart);
+static double cre_spec_idx_particle(int ipart);
 
-double (*cr_energy_density) (int);
+static double (*cr_energy_density) (int);
+static double (*cre_spec_norm) (int);
+static double (*cre_spectral_index) (int);
+
+static double nufac = 0;
 
 void aSynchrotron(int ipart, double *j_nu)	// [erg/cm^3/Hz] 
 {
@@ -31,10 +37,30 @@ void aSynchrotron(int ipart, double *j_nu)	// [erg/cm^3/Hz]
  	else 
 		B = sqrt(bx*bx + by*by);
 
-	const double eps_cre = cre_spec_norm * (*cr_energy_density) (ipart);
-	
-	j_nu[0] = prefac * pow(B, 0.5 * (s + 1)) * eps_cre;
+	if (B == 0)
+		B = 3e-6;
 
+	if (Gas[ipart].NMach < 1.3) {
+		
+		j_nu[0] = j_nu[1] = j_nu[2] = 0;
+	
+		return ;
+	}
+
+	double n0 = (*cre_spec_norm) (ipart) * (*cr_energy_density) (ipart);
+	double s = (*cre_spectral_index)(ipart);
+		
+	double prefac = sqrt(3)*p3(e)/(m_e * p2(c)*(s + 1)) //Longair eq 8.128
+	    * gsl_sf_gamma(s / 4 + 19. / 12.) 
+		* gsl_sf_gamma(s / 4. - 1. / 12.)
+	    * pow(nufac , (s - 1)/2);
+
+	if (Param.SynchroPAngInt) // Longair eq 8.87
+		prefac *= 0.5 * sqrt(pi) * gsl_sf_gamma(s / 4 + 5. / 4.)
+		    / gsl_sf_gamma(s / 4. + 7. / 4.);
+
+	j_nu[0] = prefac * pow(B, 0.5 * (s + 1)) * n0;
+	
 	double sin_2chi, cos_2chi;
 
 	if ((bx != 0) || (by != 0)) {	// Kotarba 2010 
@@ -62,12 +88,19 @@ void aSynchrotron(int ipart, double *j_nu)	// [erg/cm^3/Hz]
 void set_aSynchro_factors()
 {
 	switch (Param.Effect_Flag) {
+
 	case 0:
 		rprintf("Using CR electrons normalisation "
 			"relative to thermal \n\n");
 
 		cr_energy_density = &EpsNtherm;
+		
+		cre_spec_norm = &cre_spec_norm_parfile;
+		
+		cre_spectral_index = &cre_spec_idx_parfile;
+
 		break;
+
 	case 1:
 		rprintf("Using CR electrons normalisation \n"
 			"from simulation, setting X_crp = 1 \n");
@@ -76,24 +109,80 @@ void set_aSynchro_factors()
 
 		Param.X_crp = 1;
 
+		cre_spec_norm = &cre_spec_norm_parfile;
+
+		cre_spectral_index = &cre_spec_idx_parfile;
+
 		break;
+
+	case 2:
+		rprintf("CR electrons from particles with standard relic model");
+	
+		cr_energy_density = &EpsNtherm;
+	
+		cre_spec_norm = &cre_spec_norm_particle;
+
+		cre_spectral_index = &cre_spec_idx_particle;
+
+		break;
+
 	default:
 		Assert(0, "Effect Flag  not handled");
 		break;
 	}
 
-	cre_spec_norm = Param.X_crp * (s - 2) * pow(Param.E_min * eV2cgs, s - 2);
-
-	prefac = sqrt(3) * p3(e) / (m_e * c * c * (s + 1)) // Longair eq 8.128
-	    * gsl_sf_gamma(s / 4 + 19. / 12.) * gsl_sf_gamma(s / 4. - 1. / 12.)
-	    * pow( (3*e)/(p3(m_e) * c * c * c * c * c * 2 * pi * nu), (s - 1)/2);
-
-	if (Param.SynchroPAngInt) // Longair eq 8.87
-		prefac *= 0.5 * sqrt(pi) * gsl_sf_gamma(s / 4 + 5. / 4.)
-		    / gsl_sf_gamma(s / 4. + 7. / 4.);
+	nufac = (3*e)/(p3(m_e) * c * c * c * c * c * 2 * pi * nu);
 
 	return;
 }
+
+static double cre_spec_norm_parfile(int ipart)
+{
+	return Param.X_crp * (Param.a_crp - 2) * 
+			pow(Param.E_min * eV2cgs, Param.a_crp - 2);
+};
+
+static double cre_spec_idx_parfile(int ipart)
+{
+	return Param.a_crp;
+}
+
+static double cre_spec_norm_particle(int ipart) // Kang, Ryu, Cen, Ostriker 07
+{
+	double  M = Gas[ipart].NMach;
+
+	double norm = 0;
+
+	if (M < 2)
+		return 0;
+
+	if (M < 2)
+		norm = 1.96e-3 * (M*M-1); // eq. A2
+	else { // M>2
+
+		norm = 5.46 - 9.78 * (M-1) + 4.17*p2(M-1) - 0.334 * p3(M-1) 
+		      + 0.57 * p2(p2(M-1)); //eq. A5+6
+		
+		norm /= M*M*M*M;
+	}
+
+	return norm / 7.6e14; // Donnert et al 2016, eq. 40, p_0 = 0.1 me c
+}
+
+static double cre_spec_idx_particle(int ipart)
+{
+	double  M = Gas[ipart].NMach;
+
+	double s = 0;
+
+	if (M < 1)
+		s = 0; // no emission
+	else
+		s = 2* (M*M + 1) / (M*M-1);
+
+	return s;
+}
+
 
 #undef s
 #undef nu
